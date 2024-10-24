@@ -43,11 +43,7 @@ ram.runtime = "50M"
 
     [resources.sources]
 
-    [resources.sources.sugarizer]
-    url = "https://github.com/llaske/sugarizer/archive/refs/tags/v1.8.0.tar.gz"
-    sha256 = "729d1c97b5f041f93d1077c072d6545ee6ae95cba52d5635983341a29e2d0380"
-
-    [resources.sources.sugarizer-server]
+    [resources.sources.main]
     url = "https://github.com/llaske/sugarizer-server/archive/refs/tags/v1.5.0.tar.gz"
     sha256 = "f5ff014571d14a048375fbb2c960993c613689fc88f3d57b9136eb5e9404e43c"
 

@@ -28,8 +28,7 @@ ynh_mongo_setup_db --db_user=$db_user --db_name=$db_name
 #=================================================
 ynh_script_progression "Setting up source files..."
 
-ynh_setup_source --dest_dir="$install_dir/sugarizer" --source_id="sugarizer"
-ynh_setup_source --dest_dir="$install_dir/sugarizer-server" --source_id="sugarizer-server"
+ynh_setup_source --dest_dir="$install_dir"
 
 #=================================================
 # APP INITIAL CONFIGURATION
