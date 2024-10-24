@@ -1,0 +1,63 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/manifest.v2.schema.json
+
+packaging_format = 2
+
+id = "sugarizer"
+name = "Sugarizer"
+description.en = "Explain in *a few (10~15) words* the purpose of the app or what it actually does (it is meant to give a rough idea to users browsing a catalog of 100+ apps)"
+description.fr = "Expliquez en *quelques* (10~15) mots l'utilité de l'app ou ce qu'elle fait (l'objectif est de donner une idée grossière pour des utilisateurs qui naviguent dans un catalogue de 100+ apps)"
+
+version = "1.0~ynh1"
+
+maintainers = ["johndoe"]
+
+[upstream]
+license = "Apache-2.0"
+website = "https://sugarizer.org/"
+demo = "https://try.sugarizer.org/"
+admindoc = "https://github.com/llaske/sugarizer-server/blob/master/docs/install.md"
+code = "https://github.com/llaske/sugarizer-server"
+
+[integration]
+yunohost = ">= 11.2.30"
+helpers_version = "2.1"
+architectures = "all"
+multi_instance = true
+
+ldap = false
+sso = false
+
+disk = "50M"
+ram.build = "50M"
+ram.runtime = "50M"
+
+[install]
+    [install.domain]
+    type = "domain"
+
+    [install.init_main_permission]
+    type = "group"
+    default = "visitors"
+
+[resources]
+
+    [resources.sources]
+
+    [resources.sources.sugarizer]
+    url = "https://github.com/llaske/sugarizer/archive/refs/tags/v1.8.0.tar.gz"
+    sha256 = "729d1c97b5f041f93d1077c072d6545ee6ae95cba52d5635983341a29e2d0380"
+
+    [resources.sources.sugarizer-server]
+    url = "https://github.com/llaske/sugarizer-server/archive/refs/tags/v1.5.0.tar.gz"
+    sha256 = "f5ff014571d14a048375fbb2c960993c613689fc88f3d57b9136eb5e9404e43c"
+
+    [resources.system_user]
+
+    [resources.install_dir]
+
+    #[resources.data_dir]
+
+    [resources.permissions]
+    main.url = "/"
+
+    [resources.ports]

@@ -1,0 +1,86 @@
+#!/bin/bash
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression "Installing dependencies..."
+
+ynh_nodejs_install
+ynh_hide_warnings ynh_install_mongo
+
+#=================================================
+# CREATE A MONGODB DATABASE
+#=================================================
+#ynh_script_progression "Creating a MongoDB database..."
+
+#mkdir -p $install_dir/db
+
+db_name=$(ynh_sanitize_dbid --db_name=$app)
+db_user=$db_name
+ynh_app_setting_set --key=db_name --value=$db_name
+ynh_mongo_setup_db --db_user=$db_user --db_name=$db_name
+
+#=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
+ynh_script_progression "Setting up source files..."
+
+ynh_setup_source --dest_dir="$install_dir/sugarizer" --source_id="sugarizer"
+ynh_setup_source --dest_dir="$install_dir/sugarizer-server" --source_id="sugarizer-server"
+
+#=================================================
+# APP INITIAL CONFIGURATION
+#=================================================
+ynh_script_progression "Adding $app's configuration files..."
+
+ynh_config_add --template="sugarizer.ini" --destination="$install_dir/sugarizer-server/env/production.ini"
+
+#=================================================
+# SYSTEM CONFIGURATION
+#=================================================
+ynh_script_progression "Adding system configurations related to $app..."
+
+ynh_config_add_nginx
+
+ynh_config_add_systemd
+
+yunohost service add "$app" --description="" --log="/var/log/$app/$app.log"
+
+#=================================================
+# CONFIGURE MONGOD
+#=================================================
+ynh_script_progression "Configuring MongoDB..."
+
+ynh_hide_warnings systemctl enable mongod --quiet
+ynh_systemctl --service=mongod --action=restart --log_path=/var/log/mongodb/mongod.log --wait_until="Waiting for connections"
+
+#=================================================
+# INSTALL DODOC
+#=================================================
+ynh_script_progression "Installing the app..."
+
+pushd "$install_dir/sugarizer"
+ 	ynh_hide_warnings npm install
+ 	#cp -r build/* .
+popd
+
+pushd "$install_dir/sugarizer-server"
+ 	ynh_hide_warnings npm install --no-optional
+ 	#cp -r build/* .
+popd
+
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression "Starting $app's systemd service..."
+
+ynh_systemctl --service="$app" --action="start" --log_path="systemd"
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression "Installation of $app completed"
