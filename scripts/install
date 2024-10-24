@@ -61,14 +61,8 @@ ynh_systemctl --service=mongod --action=restart --log_path=/var/log/mongodb/mong
 #=================================================
 ynh_script_progression "Installing the app..."
 
-pushd "$install_dir/sugarizer"
- 	ynh_hide_warnings npm install
- 	#cp -r build/* .
-popd
-
-pushd "$install_dir/sugarizer-server"
+pushd "$install_dir"
  	ynh_hide_warnings npm install --no-optional
- 	#cp -r build/* .
 popd
 
 #=================================================

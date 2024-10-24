@@ -16,17 +16,14 @@ ynh_systemctl --service="$app" --action="stop"
 #=================================================
 ynh_script_progression "Upgrading source files..."
 
-ynh_setup_source --dest_dir="$install_dir" --full_replace --keep=".env data"
+ynh_setup_source --dest_dir="$install_dir" --full_replace --keep="/sugarizer-server/env/production.ini"
 
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
 ynh_script_progression "Updating $app's configuration files..."
 
-ynh_config_add --template="some_config_file" --destination="$install_dir/some_config_file"
-
-chmod 400 "$install_dir/some_config_file"
-chown "$app:$app" "$install_dir/some_config_file"
+ynh_config_add --template="sugarizer.ini" --destination="$install_dir/sugarizer-server/env/production.ini"
 
 #=================================================
 # REAPPLY SYSTEM CONFIGURATIONS
